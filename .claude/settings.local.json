@@ -5,7 +5,10 @@
       "Bash(Select-Object Name, PSIsContainer)",
       "Bash(Format-Table -AutoSize)",
       "PowerShell(Get-ChildItem -Path \"d:\\\\01_Work\\\\Digiation\\\\03 Talemia Backend\\\\mnt\" -Recurse -Force | Select-Object FullName | ForEach-Object { $_.FullName.Replace\\(\"d:\\\\01_Work\\\\Digiation\\\\03 Talemia Backend\\\\\", \"\"\\) })",
-      "PowerShell(Get-ChildItem -Path \"d:\\\\01_Work\\\\Digiation\\\\03 Talemia Backend\" -Recurse | Where-Object {$_.Extension -eq '.py'} | ForEach-Object { $_.FullName.Replace\\(\"d:\\\\01_Work\\\\Digiation\\\\03 Talemia Backend\\\\\", \"\"\\) })"
+      "PowerShell(Get-ChildItem -Path \"d:\\\\01_Work\\\\Digiation\\\\03 Talemia Backend\" -Recurse | Where-Object {$_.Extension -eq '.py'} | ForEach-Object { $_.FullName.Replace\\(\"d:\\\\01_Work\\\\Digiation\\\\03 Talemia Backend\\\\\", \"\"\\) })",
+      "Bash(docker exec *)",
+      "Bash(docker compose *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8000/api/docs/)"
     ]
   }
 }

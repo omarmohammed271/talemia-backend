@@ -10,26 +10,15 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-starrise-dev-key-ch
 
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,178.62.66.109").split(",")
 
 INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.auth",
+    "django.contrib.staticfiles",
     "rest_framework",
     "drf_spectacular",
-]
-
-TEMPLATES = [
-    {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
-                "django.template.context_processors.request",
-            ],
-        },
-    },
+    "dashboards",
 ]
 
 MIDDLEWARE = [
@@ -39,7 +28,19 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "starrise_api.urls"
 
-WSGI_APPLICATION = "starrise_api.wsgi.application"
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.request",
+                "django.template.context_processors.debug",
+            ],
+        },
+    },
+]
 
 DATABASES = {
     "default": {
@@ -63,14 +64,14 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Talemia Dashboard API",
-    "DESCRIPTION": (
-        "Executive dashboards API providing KPIs, pipeline metrics, and opportunity data "
-        "across BD, Financials, Business Lines, Account Managers, and Commercial views."
-    ),
-    "VERSION": "1.0.0",
+    "TITLE":       "Starrise III — BD Dashboard API",
+    "DESCRIPTION": "Business Development Dashboard API",
+    "VERSION":     "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
 }
+
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 LANGUAGE_CODE = "en-us"
 TIME_ZONE     = "Asia/Riyadh"

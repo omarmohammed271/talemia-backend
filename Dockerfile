@@ -6,7 +6,6 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# System deps needed by psycopg2-binary
 RUN apt-get update && apt-get install -y --no-install-recommends \
         libpq-dev \
     && rm -rf /var/lib/apt/lists/*
@@ -21,14 +20,28 @@ RUN pip install --upgrade pip && \
 # ── Stage 3: final image ───────────────────────────────────────
 FROM deps AS final
 
-COPY . .
+# Copy Django project package
+COPY starrise_api/ ./starrise_api/
 
-# Remove local .env — config comes from docker-compose environment
+# Copy settings into Django project package (it lives in root on disk)
+COPY settings.py ./starrise_api/settings.py
+
+# Create dashboards app package
+RUN mkdir -p /app/dashboards && touch /app/dashboards/__init__.py
+
+# Copy app files into dashboards/
+COPY queries.py  ./dashboards/queries.py
+COPY views.py    ./dashboards/views.py
+COPY db.py       ./dashboards/db.py
+COPY urls.py     ./dashboards/urls.py
+
+# Generate manage.py
+RUN printf '#!/usr/bin/env python\nimport os, sys\n\ndef main():\n    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "starrise_api.settings")\n    from django.core.management import execute_from_command_line\n    execute_from_command_line(sys.argv)\n\nif __name__ == "__main__":\n    main()\n' > /app/manage.py
+
 RUN rm -f .env
 
 EXPOSE 8000
 
-# Gunicorn: 4 workers, bind to 0.0.0.0:8000
 CMD ["gunicorn", "starrise_api.wsgi:application", \
      "--bind", "0.0.0.0:8000", \
      "--workers", "4", \

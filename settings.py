@@ -15,6 +15,7 @@ ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,178.62.66.109").
 INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.auth",
+    "django.contrib.staticfiles",
     "rest_framework",
     "drf_spectacular",
     # "dashboards",
@@ -26,6 +27,20 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "starrise_api.urls"
+
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.request",
+                "django.template.context_processors.debug",
+            ],
+        },
+    },
+]
 
 DATABASES = {
     "default": {
@@ -57,6 +72,9 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
 }
+
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 LANGUAGE_CODE = "en-us"
 TIME_ZONE     = "Asia/Riyadh"

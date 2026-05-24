@@ -181,9 +181,11 @@ SELECT
             FROM gold.d5_opportunity_stage
         ),
         'expected_award_date', (
-            SELECT JSON_AGG(JSON_BUILD_OBJECT('label', label, 'count', count)
-                            ORDER BY label)
-            FROM gold.d5_expected_award_date
+            SELECT COALESCE(
+                (SELECT JSON_AGG(JSON_BUILD_OBJECT('label', label, 'count', count) ORDER BY label)
+                 FROM gold.d5_expected_award_date
+                 WHERE label IS NOT NULL),
+            '[]'::json)
         ),
         'opportunity_business_line', (
             SELECT JSON_AGG(JSON_BUILD_OBJECT('label', label, 'count', count)
