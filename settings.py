@@ -10,7 +10,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-starrise-dev-key-ch
 
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = ["178.62.66.109","localhost","127.0.0.1"]
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,178.62.66.109").split(",")
 
 INSTALLED_APPS = [
     "django.contrib.contenttypes",
