@@ -20,20 +20,17 @@ RUN pip install --upgrade pip && \
 # ── Stage 3: final image ───────────────────────────────────────
 FROM deps AS final
 
-# Copy Django project package
+# Copy Django project package (includes settings.py, views.py, db.py, urls.py, queries.py)
 COPY starrise_api/ ./starrise_api/
-
-# Copy settings into Django project package (it lives in root on disk)
-COPY settings.py ./starrise_api/settings.py
 
 # Create dashboards app package
 RUN mkdir -p /app/dashboards && touch /app/dashboards/__init__.py
 
 # Copy app files into dashboards/
-COPY queries.py  ./dashboards/queries.py
-COPY views.py    ./dashboards/views.py
-COPY db.py       ./dashboards/db.py
-COPY urls.py     ./dashboards/urls.py
+COPY starrise_api/queries.py  ./dashboards/queries.py
+COPY starrise_api/views.py    ./dashboards/views.py
+COPY starrise_api/db.py       ./dashboards/db.py
+COPY starrise_api/urls.py     ./dashboards/urls.py
 
 # Generate manage.py
 RUN printf '#!/usr/bin/env python\nimport os, sys\n\ndef main():\n    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "starrise_api.settings")\n    from django.core.management import execute_from_command_line\n    execute_from_command_line(sys.argv)\n\nif __name__ == "__main__":\n    main()\n' > /app/manage.py
