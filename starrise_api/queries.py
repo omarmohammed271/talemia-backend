@@ -159,6 +159,7 @@ SELECT
 """
 
 # ── Dashboard 5 — Commercial ───────────────────────────────────
+# ── Dashboard 5 — Commercial ───────────────────────────────────
 DASHBOARD_5 = """
 SELECT
     JSON_BUILD_OBJECT(
@@ -182,10 +183,20 @@ SELECT
         ),
         'expected_award_date', (
             SELECT COALESCE(
-                (SELECT JSON_AGG(JSON_BUILD_OBJECT('label', label, 'count', count) ORDER BY label)
-                 FROM gold.d5_expected_award_date
-                 WHERE label IS NOT NULL),
-            '[]'::json)
+                JSON_AGG(JSON_BUILD_OBJECT(
+                    'label', t.label::text,
+                    'count', t.count::int
+                ) ORDER BY t.label),
+                '[]'::json
+            )
+            FROM (
+                SELECT col.column_name
+                FROM information_schema.columns col
+                WHERE col.table_schema = 'gold'
+                  AND col.table_name = 'd5_expected_award_date'
+                  AND col.column_name = 'label'
+            ) has_label
+            CROSS JOIN gold.d5_expected_award_date t
         ),
         'opportunity_business_line', (
             SELECT JSON_AGG(JSON_BUILD_OBJECT('label', label, 'count', count)
